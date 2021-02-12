@@ -1,4 +1,4 @@
-# blogs
+# Blogs
 
 G2i Blog posts and its translations. This repo's goal is to become the central place for blog submissions and translations.  
 
