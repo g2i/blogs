@@ -9,7 +9,7 @@ Temos uma ferramenta para ajudá-lo a resolver esses mistérios com mais rapidez
 [Hermes-profile-transformer](https://www.npmjs.com/package/hermes-profile-transformer) permite que você visualize o desempenho do seu aplicativo de uma maneira fácil e precisa.
 
 
-Antes de mergulhar no que a ferramenta faz, vamos ter certeza de que você sabe o que é _criação de perfil_ quando se trata de aplicativos.  [Criação de Perfil ou _Profiling_](https://en.wikipedia.org/wiki/Profiling_(computer_programming))  é "uma forma de análise dinâmica de programa que mede, por exemplo, o espaço (memória) ou complexidade de tempo de um programa, o uso de instruções particulares ou a frequência e duração das chamadas de função."
+Antes de mergulhar no que a ferramenta faz, vamos ter certeza de que você sabe o que é _criação de perfil_ quando se trata de aplicativos.  [Criação de Perfil ou _Profiling_](https://en.wikipedia.org/wiki/Profiling_(computer_programming))  é "uma forma de análise dinâmica de programa que mede, por exemplo, o espaço (memória) ou complexidade de tempo de um programa, o uso de instruções específicas ou a frequência e duração das chamadas de função."
 
 Simplificando - o perfil gerado é extremamente importante para entender o desempenho do tempo de execução do seu programa, ou em particular do aplicativo React Native, e encontrar soluções para otimizar esse tempo de execução.
 
@@ -29,7 +29,7 @@ O uso do Hermes em aplicativos React Native não é necessário. No entanto, con
 
 Para obter mais informações sobre o Hermes e como usá-lo, você pode verificar esta [documentação](https://reactnative.dev/docs/hermes).
 
-O Hermes melhora o desempenho do aplicativo React Native em um ambiente móvel. Você pode ver exemplos disso nos experimentos realizados por [Ram](https://twitter.com/nparashuram). Essas demonstrações provaram quão poderoso e rápido Hermes pode ser quando usado no ecossistema React Native.
+O Hermes melhora o desempenho do aplicativo React Native em um ambiente mobile. Você pode ver exemplos disso nos experimentos realizados por [Ram](https://twitter.com/nparashuram). Essas demonstrações provaram quão poderoso e rápido Hermes pode ser quando usado no ecossistema React Native.
 
 ![Hermes Performance Improvements](https://uploads-ssl.webflow.com/5f64c4e9139e46231d773b0a/5f861bfd91206f535d549230_Zkbbd4HAWYI-boTHnnF6qZEJnJEcK3SZbZ1_ki3ygKQkdBUKyHvW9KRTNJsgKFkQHCqXI7xzu5G7cngbw_IvGsSKWGUrRt4zeZS6t9trAOJvkRKGO3UFaelMBX-0cj0cmMcyLPer.jpeg)
 
