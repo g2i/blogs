@@ -13,7 +13,7 @@ Antes de mergulhar no que a ferramenta faz, vamos ter certeza de que você sabe 
 
 Simplificando - o perfil gerado é extremamente importante para entender o desempenho do tempo de execução do seu programa, ou em particular do aplicativo React Native, e encontrar soluções para otimizar esse tempo de execução.
 
-O Hermes-profile-transformer ajuda os desenvolvedores a criar o perfil e visualizar o desempenho do JavaScript em execução no [Hermes](https://github.com/facebook/hermes) em um aplicativo React Native. Uma maneira comum de analisar o desempenho de um programa é analisar o perfil de amostragem na guia [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools).
+O Hermes-profile-transformer ajuda os desenvolvedores a criar o perfil e visualizar o desempenho do JavaScript em execução no [Hermes](https://github.com/facebook/hermes) em um aplicativo React Native. Uma maneira simples de analisar o desempenho de um programa é analisar o perfil de amostragem na guia [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools).
 
 É aqui que nos deparamos com um obstáculo. O criador de perfil do Hermes gera um formato diferente dos processos do Chrome DevTools. Esses dois formatos são como fogo e gelo. É difícil fazer com que eles formem um bom par.
 
@@ -25,7 +25,7 @@ Vamos mergulhar na criação de perfil de seu aplicativo React Native com Hermes
 
 Hermes é um JavaScript Engine de código aberto projetado para executar aplicativos React Native no Android. Hermes se destaca entre seus concorrentes por seu desempenho quando se trata de tempos de inicialização, uso de memória e tamanho do aplicativo.
 
-O uso do Hermes em aplicativos React Native não é necessário. No entanto, considerando que o Hermes foi explicitamente projetado pelo Facebook para o React Native, é provável que seja o modo mais comumente adotado de executar aplicativos do React Native no futuro.
+O uso do Hermes em aplicativos React Native não é necessário. No entanto, considerando que o Hermes foi projetado explicitamente pelo Facebook para o React Native, é provável que seja o modo mais adotado de executar aplicativos do React Native no futuro.
 
 Para obter mais informações sobre o Hermes e como usá-lo, você pode verificar esta [documentação](https://reactnative.dev/docs/hermes).
 
@@ -37,15 +37,15 @@ Você pode mergulhar mais fundo nos excelentes experimentos de Ram com Hermes [b
 
 ### Formato Dos Eventos Rastreados 
 
-Os aplicativos React Native em execução no Hermes possuem um mecanismo para criar o perfil de desempenho do aplicativo conforme ele é executado. O processo para fazer isso é relativamente simples. O menu do desenvolvedor de aplicativos RN em execução no Hermes tem uma opção para alternar a criação de perfil. Ao habilitar a criação de perfil, o criador de perfil começa a criar eventos de rastreamento (na forma de amostras e frames de pilha) que podem ser usados para obter informações de tempo das funções em execução.
+Nos aplicativos React Native em execução no Hermes possuem um mecanismo para criar o perfil de desempenho do aplicativo conforme ele é executado. O processo para fazer isso é relativamente simples. O menu do desenvolvedor de aplicativos RN em execução no Hermes tem uma opção para alternar a criação de perfil. Ao habilitar a criação de perfil, o criador de perfil começa a criar eventos de rastreamento (na forma de amostras e frames de pilha) que podem ser usados para obter informações de tempo das funções em execução.
 
-No entanto, os eventos de rastreamento criados pelo criador de perfil Hermes são do formato _JSON Object_, em oposição ao formato _JSON Array_ com suporte do Chrome. Portanto, precisamos de um [transformador](https://www.npmjs.com/package/hermes-profile-transformer) que converta o perfil Hermes em formato _JSON Array_, que é compatível com Chrome DevTools.
+No entanto, os eventos rastreados criados pelo criador de perfil Hermes são do formato _JSON Object_, em oposição ao formato _JSON Array_ com suporte do Chrome. Portanto, precisamos de um [transformador](https://www.npmjs.com/package/hermes-profile-transformer) que converta o perfil Hermes em formato _JSON Array_, que é compatível com Chrome DevTools.
 
-### Entendendo Os Events Rastreados
+### Entendendo Os Eventos Rastreados
 
-Os eventos de rastreamento são pontos de dados que determinam o estado de um aplicativo em qualquer ponto do tempo. Esses pontos de dados incluem nomes das funções em execução, seus processos e IDs de thread, entre muitos outros. Os perfis de amostragem mais comuns geralmente podem ser analisados como _JSON_ e podem estar em 2 formatos:
+Os eventos rastreados são pontos de dados que determinam o estado de um aplicativo em qualquer ponto do tempo. Esses pontos de dados incluem nomes das funções em execução, seus processos e IDs de thread, entre muitos outros. Os perfis de amostragem mais comuns geralmente podem ser analisados como _JSON_ e podem estar em 2 formatos:
 
-**Formato Array JSON**  - Este é o formato mais simples. Ele usa uma série de objetos de evento que indicam os horários de início e término (com base em fases) e pode ser carregado no Chrome DevTools para visualizar o desempenho de um aplicativo. Por exemplo:
+**Formato Array JSON**  - Este é o formato mais simples. Ele usa uma série de objetos de evento que indicam os horários de início e fim (com base em fases) e pode ser carregado no Chrome DevTools para visualizar o desempenho de um aplicativo. Por exemplo:
 
 ```json
 [
@@ -73,13 +73,13 @@ O formato _JSON Array_ é possivelmente a maneira mais simples e eficaz de armaz
  }
 ```
 
-O objeto contém 3 chaves, a saber, `traceEvents`,` samples` e `stackFrames`, cada uma delas é extremamente importante para analisar o desempenho do aplicativo. A vantagem dessa estrutura sobre o formato de matriz _JSON_ é que as informações são armazenadas em um formato mais eficiente, permitindo que você adicione pontos de dados adicionais no futuro.
+O objeto contém 3 chaves, sendo, `traceEvents`,` samples` e `stackFrames`, cada uma delas é extremamente importante para analisar o desempenho do aplicativo. A vantagem dessa estrutura sobre o formato de matriz _JSON_ é que as informações são armazenadas em um formato mais eficiente, permitindo que você adicione pontos de dados adicionais no futuro.
 
-No caso do perfil Hermes, obtemos um objeto _JSON_ de volta, com eventos de metadados em sua propriedade `traceEvents` e as propriedades `samples` e `stackFrames` capturando informações sobre todas as outras funções em execução durante o intervalo de criação de perfil. Essas propriedades contêm informações essenciais, como categorias de eventos, fases e carimbos de data / hora, que nos ajudam a reunir muitas informações sobre nosso aplicativo React Native.
+No caso do perfil Hermes, obtemos um objeto _JSON_ com eventos de metadados em sua propriedade `traceEvents` e as propriedades `samples` e `stackFrames` capturando informações sobre todas as outras funções em execução durante o intervalo de criação de perfil. Essas propriedades contêm informações essenciais, como categorias de eventos, fases e carimbos de data / hora, que nos ajudam a reunir muitas informações sobre nosso aplicativo React Native.
 
 ### Eventos & Fases
 
-Eventos são ações disparadas enquanto um aplicativo está em execução. Esses eventos podem ser de diferentes tipos e ter várias fases. O tipo mais simples de evento é o Evento de Duração (Duration Events). Como o nome indica, esses eventos simplesmente capturam e registram o tempo que leva para concluir uma ação. Dois pontos de dados distintos, a saber, o `início` e o` fim` de um evento de duração, especificam o status desses eventos. Esses pontos de dados são conhecidos como fases.
+Eventos são ações disparadas enquanto um aplicativo está em execução. Esses eventos podem ser de diferentes tipos e ter várias fases. O tipo mais simples de evento é o Evento de Duração (Duration Events). Como o nome indica, esses eventos simplesmente capturam e registram o tempo que leva para concluir uma ação. Dois pontos de dados distintos, sendo, o `início` e o` fim` de um evento de duração, especificam o status desses eventos. Esses pontos de dados são conhecidos como fases.
 
 ![](https://uploads-ssl.webflow.com/5f64c4e9139e46231d773b0a/5f877cca6a6e5b56035138c3_Screen%20Shot%202020-10-14%20at%203.33.24%20PM.png)
 
@@ -111,7 +111,7 @@ Os eventos também podem ser classificados em categorias amplas com base em sua 
 }
 ```
 
-Cada um desses objetos de estrutura de pilha (_stack_) pode ter eventos de início e término correspondentes. Os eventos individuais de início/término podem ser chamados de _Nodes_. Os _Nodes_ só têm contexto em carimbos de data/hora específicos, ou seja, um _Node_ pode estar no estado `start`,` end` ou `running` em um determinado carimbo de data/hora.
+Cada um desses objetos de estrutura de pilha (_stack_) pode ter eventos de início e fim correspondentes. Os eventos individuais de início/fim podem ser chamados de _Nodes_. Os _Nodes_ só têm contexto em carimbos de data/hora específicos, ou seja, um _Node_ pode estar no estado `start`,` end` ou `running` em um determinado carimbo de data/hora.
 
 2. Active & Last Active Nodes (Nós ativos e último nós ativos) - Com base na definição anterior, os _Nodes_ ativos em qualquer momento específico são os _Nodes_ que estão ativos no carimbo de data/hora atual. Os Últimos _Nodes_ ativos representam, da mesma forma, os _Nodes_ que estavam ativos no tempo de amostragem anterior.
 
@@ -136,10 +136,10 @@ Registre um gerador de perfil de amostragem Hermes seguindo estas etapas:
 
 - Navegue até o terminal do servidor Metro em execução.
 - Pressione d para abrir o Menu do Desenvolvedor.
-- Selecione Ativar Perfil de Amostragem.
+- Selecione `Enable Sampling Profiler` (Ativar Perfil de Amostragem).
 - Execute seu JavaScript em seu aplicativo pressionando qualquer botão.
 - Abra o Menu do Desenvolvedor pressionando d novamente.
-- Selecione Disable Sampling Profiler para parar a gravação e salvar o perfil de amostragem. Um toast mostrará o local onde o criador de perfil de amostragem foi salvo, geralmente em /data/user/0/com.appName/cache/*.cpuprofile
+- Selecione `Disable Sampling Profiler` para parar a gravação e salvar o perfil de amostragem. Um toast mostrará o local onde o criador de perfil de amostragem foi salvo, geralmente em /data/user/0/com.appName/cache/*.cpuprofile
 
 ![Toast Notification of Profile saving](https://uploads-ssl.webflow.com/5f64c4e9139e46231d773b0a/5f861bfd5e3c8911ac2b99d8_Wyju3SrkXUDjfkgfD1sdmfZbRUN99w94OjnHX9fl4-Fcq01L-bRiLSBQ0ubN7ndaKZK8U8BxsSyKs-Iiw8KtP-3q63ftyM4NhtW7MTsETWg7g6sqDDQOce6IGWLyeok-W4r6cSpb.png)
 
@@ -151,7 +151,7 @@ Você pode usar o comando `react-native profile-hermes` da React Native CLI para
 
 Vamos mergulhar um pouco mais fundo nas etapas do seu fluxo de desenvolvimento.
 
-Primeiro, você deseja obter mapas de origem que ajudarão o perfil a associar eventos de rastreamento ao código do aplicativo. Embora seja opcional, ainda é altamente recomendável que os mapas de origem sejam fornecidos para ajudar a fornecer melhores insights sobre o desempenho do aplicativo. Você pode fazer isso simplesmente ativando bundleInDebug se o aplicativo estiver sendo executado no modo de desenvolvimento, assim:
+Primeiro, você deseja obter source maps (mapas de origem) que ajudarão o perfil a associar eventos de rastreamento ao código do aplicativo. Embora seja opcional, ainda é altamente recomendável que os source maps (mapas de origem) sejam fornecidos para ajudar a fornecer melhores insights sobre o desempenho do aplicativo. Você pode fazer isso simplesmente ativando bundleInDebug se o aplicativo estiver sendo executado no modo de desenvolvimento, assim:
 
 No arquivo `android/app/build.gradle` do seu aplicativo, adicione:
 
@@ -219,7 +219,7 @@ Podemos verificar isso definindo o perfil de nosso código Javascript. Simplesme
 
 ## **Insights De Informações De Criação De Perfil**
 
-A duração de uma chamada de função pode ser identificada a partir dos carimbos de data/hora dos eventos de início e término correspondentes. Se esta informação for capturada com sucesso, os eventos aparecem em barras horizontais.
+A duração de uma chamada de função pode ser identificada a partir dos carimbos de data/hora dos eventos de início e fim correspondentes. Se esta informação for capturada com sucesso, os eventos aparecem em barras horizontais.
 
 ![Profile](https://uploads-ssl.webflow.com/5f64c4e9139e46231d773b0a/5f861bfd2452dd1c5ac6eb4e_MfjcXmCNV-arfpTl0nd9AS1PqI-OJsDpTXyYbNZDdxd0AjHYcNCEqyvnXhIpFQT58Wx8rnGiCT_INdX8EYbLa93XhzhO1miDkPC_mmjHR1dQa5HE6HLakum-H_jDEIxiLbbISqIX.png)
 
@@ -229,11 +229,11 @@ Conforme mostrado na captura de tela, as funções podem ser vistas em linhas ho
 
 Esses resumos contêm explicitamente por quanto tempo a função é executada e também podemos identificar os números de linha e coluna por meio dos quais também podemos isolar partes de nossa base de código que nos deixam mais lentos.
 
-Os mapas de origem agregam muito valor aqui. Por padrão, os números de linha e coluna são indicados em arquivos de pacote. No entanto, quando usamos mapas de origem, podemos mapear nossas chamadas de função para os arquivos "não agrupados" ou código-fonte escrito pelo usuário, melhorando a experiência de depuração.
+Os source maps (mapas de origem) agregam muito valor aqui. Por padrão, os números de linha e coluna são indicados em arquivos de pacote. No entanto, quando usamos source maps (mapas de origem), podemos mapear nossas chamadas de função para os arquivos "não agrupados" ou código-fonte escrito pelo usuário, melhorando a experiência de depuração.
 
 As categorias de eventos nos ajudam a determinar a cor das linhas da função na visualização. Em geral, temos 2 tipos de categorias:
 
-1. Obtidos a partir de mapas de origem - Mapas de origem podem ser fornecidosopcionalmente para aumentar as informações fornecidas por Hermes. Os mapas de origem nos ajudam a identificar melhores categorias de eventos, agregando valor à nossa visualização. Essas categorias incluem duas categorias amplas: 
+1. Obtidos a partir de source maps (mapas de origem) - Source maps (mapas de origem) podem ser fornecidos opcionalmente para aumentar as informações fornecidas pelo Hermes. Os source maps (mapas de origem) nos ajudam a identificar melhores categorias de eventos, agregando valor à nossa visualização. Essas categorias incluem duas categorias amplas: 
 
 ```
    `react-native-internals`
@@ -243,7 +243,7 @@ As categorias de eventos nos ajudam a determinar a cor das linhas da função na
    `other_node_modules`
 ```
 
-2. Obtido de Amostras Hermes - Essas categorias são obtidas por padrão e podem ser mapeadas para chamadas de função. As categorias Javascript e Native são vistas predominantemente e, em conjunto com os mapas de origem, isso pode nos ajudar a diferenciar o código clichê escrito em node_modules e o código real que escrevemos.
+2. Obtido de Amostras Hermes - Essas categorias são obtidas por padrão e podem ser mapeadas para chamadas de função. As categorias Javascript e Native são vistas predominantemente e, em conjunto com os source maps (mapas de origem), isso pode nos ajudar a diferenciar o código clichê escrito em node_modules e o código real que escrevemos.
 
 Como exemplo do perfil acima na imagem, podemos identificar algumas funções que têm uma longa duração. Por exemplo, `batchedUpdates $ 1` tem alta frequência e longa duração. É chamado 10 vezes no nível de zoom da imagem e leva tempos diferentes em cada chamada. Podemos, portanto, notar que esta é uma função crucial se quisermos otimizar nosso código para velocidade. (Esta função, no entanto, é interna para `react-native`, tendo a categoria de` react-native-internals`, portanto, saber quando e por quanto tempo esta função é chamada pode ser usado pelos desenvolvedores do núcleo React Native para melhorar o desempenho do React Native) .
 
